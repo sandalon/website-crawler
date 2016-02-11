@@ -1,24 +1,25 @@
 {
-  "name": "sitemap-validator",
-  "description": "Validate the URLs in a sitemap",
-  "version": "0.5.1",
+  "name": "website-crawler",
+  "description": "Push a sites html into elasticsearch",
+  "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "git://github.com/sandalon/sitemap-validator.git"
+    "url": "git://github.com/sandalon/website-crawler.git"
   },
   "keywords": [
+    "website",
     "sitemap",
-    "validator",
-    "validation"
+    "crawl",
+    "elasticsearch"
   ],
   "author": "Corey McClelland <corey@wnd.io> (http://blog.agilereaction.io/)",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/sandalon/sitemap-validator/issues"
+    "url": "https://github.com/sandalon/website-crawler/issues"
   },
-  "main": "./lib/validate",
+  "main": "./lib/crawl",
   "bin": {
-    "smv": "./bin/smv"
+    "crawl": "./bin/crawl"
   },
   "private": false,
   "dependencies": {
@@ -27,6 +28,6 @@
     "string": "^2.1.0",
     "util": "^0.10.3",
     "xml2js": "^0.4.4",
-    "yargs": "^1.3.1"
+    "yargs": "^3.32.0"
   }
 }

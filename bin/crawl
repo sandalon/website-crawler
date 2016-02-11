@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+var argv = require('yargs')
+    .usage('Usage: crawl <url> [options]')
+    .command("URL", "URL to sitemap.xml", {alias: "url"})
+    .required(1, "URL is required")
+    .option("i", {alias: "index", demand: false, describe: "elasticsearch index name", type: "string"})
+    .option("s", {alias: "server", demand: false, describe: "elasticsearch server url", type: "string"})
+    .default("i", "html")
+    .default("s", "http://localhost:9200")
+    .help("?")
+    .alias("?", "help")
+    .example("crawl http://www.example.com/sitemap.xml -i example", "Puts the body html into the example index")
+    .argv;
+
+var arg = 'http://www.fticonsulting.com/sitemap.xml';
+
+var settings = {
+  url: argv._[ 0 ],
+  server: argv.server,
+  index: argv.index.replace('/', '')
+};
+
+var s = require('string')
+var crawl = require('../lib/crawl')
+
+// pollyfill
+if (!String.prototype.includes) {
+  String.prototype.includes = function(search, start) {
+    'use strict';
+    if (typeof start !== 'number') {
+      start = 0;
+    }
+    
+    if (start + search.length > this.length) {
+      return false;
+    } else {
+      return this.indexOf(search, start) !== -1;
+    }
+  };
+}
+
+crawl.crawlSitemap(settings, function(){ });
