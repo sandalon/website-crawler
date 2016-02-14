@@ -13,17 +13,6 @@ var argv = require('yargs')
     .example("crawl http://www.example.com/sitemap.xml -i example", "Puts the body html into the example index")
     .argv;
 
-var arg = 'http://www.fticonsulting.com/sitemap.xml';
-
-var settings = {
-  url: argv._[ 0 ],
-  server: argv.server,
-  index: argv.index.replace('/', '')
-};
-
-var s = require('string')
-var crawl = require('../lib/crawl')
-
 // pollyfill
 if (!String.prototype.includes) {
   String.prototype.includes = function(search, start) {
@@ -31,7 +20,7 @@ if (!String.prototype.includes) {
     if (typeof start !== 'number') {
       start = 0;
     }
-    
+
     if (start + search.length > this.length) {
       return false;
     } else {
@@ -39,5 +28,44 @@ if (!String.prototype.includes) {
     }
   };
 }
+
+if (!String.prototype.endsWith) {
+  String.prototype.endsWith = function(searchString, position) {
+      var subjectString = this.toString();
+      if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
+        position = subjectString.length;
+      }
+      position -= searchString.length;
+      var lastIndex = subjectString.indexOf(searchString, position);
+      return lastIndex !== -1 && lastIndex === position;
+  };
+}
+
+
+var settings = {
+  url: argv._[ 0 ],
+  server: argv.server,
+  index: argv.index
+};
+
+if(!settings.url.endsWith('.xml')){
+  console.log('URL must point to a sitemap.xml');
+  return;
+}
+
+if(settings.server.endsWith('/')){
+  settings.server = settings.server.substring(0, settings.server.length - 1);
+}
+
+if(settings.index.includes('/')){
+  settings.index = settings.index.replace('/', '');
+}
+
+var s = require('string')
+var crawl = require('../lib/crawl')
+
+console.log('Processing Sitemap: ' + settings.url);
+console.log('ES Server: ' + settings.server);
+console.log('ES Index: ' + settings.index);
 
 crawl.crawlSitemap(settings, function(){ });
